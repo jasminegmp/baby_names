@@ -1,34 +1,42 @@
-import React from 'react'
+import React from 'react';
 import * as d3 from 'd3';
 import data from './ss_name_df_cleaned.csv';
+import BarChartRace from './BarChartRace';
+import Loader from './Loader';
 
-class D3Viz extends React.Component{
+class GetData extends React.Component{
 
     constructor(props) {
         super(props);
         
         this.state = {
-            data:null
+            data:null,
+            loading: true
         };
     }
 
     componentDidMount() {
         let that = this;
+        
         d3.csv(data).then(function(data) {
             console.log(data);
             that.setState({data});
+            that.setState({loading: false});
         }).catch(function(err) {
             throw err;
         })
     }
 
     render() {
-       
+        if (this.state.loading){
+            return <Loader/>;
+        }
         return (
-            <div>Hi!</div>
+            <BarChartRace data = {this.state.data}/>
         )
+
     }
   }
   
-  export default D3Viz;
+  export default GetData;
   

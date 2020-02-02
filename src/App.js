@@ -1,10 +1,10 @@
 import React from 'react';
-import D3Viz from './D3Viz'
+import GetData from './GetData'
 
 function App() {
   return (
     <div className="App">
-      <D3Viz/>
+      <GetData/>
     </div>
   );
 }
