@@ -1,0 +1,6 @@
+Open
+- find top 12 female names for every year from 1880 - 2018
+- find top 12 male names for every year from 1880 - 2018
+- Integrate D3 and React
+- visualize results using bar chart race: https://observablehq.com/@d3/bar-chart-race-explained
+- Release to Heroku or Firebase
