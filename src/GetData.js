@@ -19,7 +19,12 @@ class GetData extends React.Component{
         let that = this;
         
         d3.csv(data).then(function(data) {
-            console.log(data);
+            
+            data.forEach(d => {
+                d.date = + d.date;
+                d.value = + d.value;
+            });
+           // console.log(data);
             that.setState({data});
             that.setState({loading: false});
         }).catch(function(err) {
