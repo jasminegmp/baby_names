@@ -19,9 +19,14 @@ class BarChartRace extends React.Component{
         let height = 800;
         let duration = 250;
         let k = 10;
+        let margin = ({top: 16, right: 6, bottom: 6, left: 0});
+        let barSize = 48;
+        
 
-        // make SVG
-        const svg = d3.create("svg")
+        let color = d3.scaleOrdinal(['#e76f51','#2a9d8f', '#e9c46a', '#f4a261']);
+
+        const svg = d3.select(this.refs.canvas)
+            .append("svg")
             .attr("viewBox", [0, 0, width, height]);
 
         let names = new Set(data.map(d => d.name))
@@ -73,45 +78,63 @@ class BarChartRace extends React.Component{
             return year
         })
 
+
         //console.log(rankedData);
+
 
         // for every name, create an array of objects which contain every year's value
         // ["Emily", [{name = "Emily, value: 123213, rank: 0},{name = "Emily, value: 23434, rank: 12},{}...]]
-        //let nameframes = d3.groups(rankedData.flatMap(([, data]) => data), d => d.name)
+        let nameframes = rankedData.flatMap(([, data]) => data)
+        let byNames = d3.nest()
+            .key(function(d) { return d.name; })
+            .entries(nameframes);
+        const byNamesArray = byNames.map(i => Object.keys(i).map(x => i[x]));
 
-                        
+        let prev = new Map(byNamesArray.flatMap(([, data]) => d3.pairs(data, (a, b) => [b, a])))
+        let next = new Map(byNamesArray.flatMap(([, data]) => d3.pairs(data)));
 
-       // console.log(output);
+        console.log(prev);
+        
+        let y = d3.scaleBand()
+            .domain(d3.range(k + 1))
+            .rangeRound([margin.top, margin.top + barSize * (k + 1 + 0.1)])
+            .padding(0.1);
+        let x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
+        const transition = svg.transition()
+            .duration(duration)
+            .ease(d3.easeLinear);
 
-       /* const updateBars = bars(svg);
-        const updateAxis = axis(svg);
-        const updateLabels = labels(svg);
-        const updateTicker = ticker(svg);
-        
-        yield svg.node();
-        
-        for (const keyframe of keyframes) {
-            const transition = svg.transition()
-                .duration(duration)
-                .ease(d3.easeLinear);
-        
-            // Extract the top bar’s value.
-            x.domain([0, keyframe[1][0].value]);
-        
-            updateAxis(keyframe, transition);
-            updateBars(keyframe, transition);
-            updateLabels(keyframe, transition);
-            updateTicker(keyframe, transition);
-        
-            invalidation.then(() => svg.interrupt());
-            await transition.end();
-        }*/
+
+        let bar = svg.append("g")
+            .attr("fill-opacity", 0.6)
+            .selectAll("rect");
+
+///// THIS PART DOESN"T WORK YET
+
+        bar.data(byNames.slice(0, k), d => d.name)
+            .join(
+            enter => enter.append("rect")
+                .attr("fill", function(d, i) {
+                    return color(i);
+                })
+                .attr("height", y.bandwidth())
+                .attr("x", x(0))
+                .attr("y", d => y((prev.get(d) || d).rank))
+                .attr("width", d => {console.log(d)}),
+            update => update,
+            exit => exit.transition(transition).remove()
+                .attr("y", d => y((next.get(d) || d).rank))
+                .attr("width", d => x((next.get(d) || d).value) - x(0))
+            )
+            .call(bar => bar.transition(transition)
+            .attr("y", d => y(d.rank))
+            .attr("width", d => x((next.get(d) || d).value) - x(0)));
 
     }
 
     render() {
         return(
-            <div>Bar!</div>
+            <div ref = "canvas">Bar!</div>
         )
     }
   }
