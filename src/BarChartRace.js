@@ -154,7 +154,9 @@ class BarChartRace extends React.Component{
         let n = 12;
         let k = 10;
 
-        const svg = d3.create("svg")
+        const svg = d3
+            .select(this.refs.canvas)
+            .append("svg")
             .attr("viewBox", [0, 0, width, height]);
       
 
@@ -166,8 +168,10 @@ class BarChartRace extends React.Component{
 
 
         let datevalues = Array.from(d3Array.rollup(data, ([d]) => d.value, d => +d.date, d => d.name))
-            .map(([date, data]) => [date, data])
+            .map(([date, data]) => [new Date(date + '-01-01'), data])
             .sort(([a], [b]) => d3.ascending(a, b));
+
+        console.log(datevalues.slice(0,11));
 
             
         //console.log("top names for 1880", that.rank(names, n, name => datevalues[0][1].get(name)))
