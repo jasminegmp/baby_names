@@ -115,8 +115,9 @@ class BarChartRace extends React.Component{
           g.select(".domain").remove();
         };
     }
-/*
-    ticker = (svg) => {
+
+    ticker = (svg, barSize, width, margin, n, datevalues, k, names) => {
+        const formatDate = d3.utcFormat("%Y");
         const now = svg.append("text")
             .style("font", `bold ${barSize}px var(--sans-serif)`)
             .style("font-variant-numeric", "tabular-nums")
@@ -124,18 +125,19 @@ class BarChartRace extends React.Component{
             .attr("x", width - 6)
             .attr("y", margin.top + barSize * (n - 0.45))
             .attr("dy", "0.32em")
-            .text(formatDate(keyframes[0][0]));
+            .text(formatDate(this.keyframes(datevalues, k, names)[0][0]));
       
         return ([date], transition) => {
           transition.end().then(() => now.text(formatDate(date)));
         };
     }
-*/
+
 
     textTween = (a, b) => {
+        let formatNumber = d3.format(",d")
         const i = d3.interpolateNumber(a, b);
         return function(t) {
-          this.textContent = d3.format(",d");
+          this.textContent = formatNumber(i(t));
         };
     }
 
@@ -189,9 +191,29 @@ class BarChartRace extends React.Component{
        const updateBars = this.bars(svg, n, x, y, prev, next);
        const updateAxis = this.axis(svg, margin, x, y, n, width, barSize);
        const updateLabels = this.labels(svg, n, x, y, prev, next);
-       //const updateTicker = this.ticker(svg);
+       const updateTicker = this.ticker(svg, barSize, width, margin, n, datevalues, k, names);
 
-    }
+      // yield svg.node();
+      let keyframes = that.keyframes(datevalues, k, names, n);
+
+       for (const keyframe of keyframes) {
+         const transition = svg.transition()
+             .duration(duration)
+             .ease(d3.easeLinear);
+     
+         // Extract the top bar’s value.
+         x.domain([0, keyframe[1][0].value]);
+     
+         updateAxis(keyframe, transition);
+         updateBars(keyframe, transition);
+         updateLabels(keyframe, transition);
+         updateTicker(keyframe, transition);
+     
+        // invalidation.then(() => svg.interrupt());
+         await transition.end();
+       }
+     }
+
 
     render() {
         return(
