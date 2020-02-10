@@ -1,5 +1,5 @@
 ## Most Popular Baby Names in the US from 1880 - 2018
-I analysed baby names in the US from 1880 to 2018 using data from the US Social Security.  in the counties of Southern California in January 2020.
+I analysed baby names in the US from 1880 to 2018 using data from the US Social Security.
 I then used D3 to display the results found using a bar chart race
 
 ## Technologies used
