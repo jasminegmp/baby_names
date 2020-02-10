@@ -225,9 +225,10 @@ class BarChartRace extends React.Component{
         return(
           <div>
             <h1>The Most Popular Baby Names in the US from 1880 - 2018</h1>
-            <h5><a href = "https://www.ssa.gov/oact/babynames/limits.html">Data Source </a></h5>
+            <h5><a href = "https://www.ssa.gov/oact/babynames/limits.html">Data Source</a></h5><Footer/>
+           
             <div ref = "canvas"></div>
-            <Footer/>
+            
           </div>
         )
     }
