@@ -1,5 +1,4 @@
 import React from 'react';
-import "./loaderStyles.scss";
 
 
 // SVG loader from https://samherbert.net/svg-loaders/

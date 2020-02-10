@@ -1,5 +1,7 @@
 import React from 'react';
 import GetData from './GetData'
+import "./styles.scss";
+
 
 function App() {
   return (

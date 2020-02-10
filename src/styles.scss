@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+
+.logo{
+    z-index: 99;
+    text-align: center;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  body{
+    font-family: 'Lato', sans-serif;
+  }
+
+  h1{
+    font-size: 2em;
+  }
+  h5{
+    font-size: 1em;
+  }
+
+  

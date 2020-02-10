@@ -17,7 +17,9 @@ class BarChartRace extends React.Component{
     rank = (names, n, value) => {
         const data = Array.from(names, name => ({name, value: value(name) || 0}));
         data.sort((a, b) => d3.descending(a.value, b.value));
-        for (let i = 0; i < data.length; ++i) data[i].rank = Math.min(n, i);
+        for (let i = 0; i < data.length; ++i) {
+          data[i].rank = Math.min(n, i);
+        }
         return data;
     }
 
@@ -82,6 +84,7 @@ class BarChartRace extends React.Component{
               .attr("y", y.bandwidth() / 2)
               .attr("x", -6)
               .attr("dy", "-0.25em")
+              .style("font-size", ".75em")
               .text(d => d.name)
               .call(text => text.append("tspan")
                 .attr("fill-opacity", 0.7)
@@ -125,6 +128,7 @@ class BarChartRace extends React.Component{
             .attr("x", width - 6)
             .attr("y", margin.top + barSize * (n - 0.45))
             .attr("dy", "0.32em")
+            .style("font-size", "4em")
             .text(formatDate(this.keyframes(datevalues, k, names)[0][0]));
       
         return ([date], transition) => {
@@ -147,12 +151,12 @@ class BarChartRace extends React.Component{
 
         let width = 800;
         let height = 800;
-        let duration = 250;
+        let duration = 500;
         let margin = ({top: 16, right: 6, bottom: 6, left: 0});
         let barSize = 48;
         const that = this;
-        let n = 12;
-        let k = 10;
+        let n = 15;
+        let k = 2;
 
         const svg = d3
             .select(this.refs.canvas)
@@ -171,17 +175,14 @@ class BarChartRace extends React.Component{
             .map(([date, data]) => [new Date(date + '-01-01'), data])
             .sort(([a], [b]) => d3.ascending(a, b));
 
-        console.log(datevalues.slice(0,11));
 
             
         //console.log("top names for 1880", that.rank(names, n, name => datevalues[0][1].get(name)))
 
         let nameframes = d3Array.groups(that.keyframes(datevalues, k, names, n).flatMap(([, data]) => data), d => d.name);
-
-        //console.log(nameframes);
-
         let prev = new Map(nameframes.flatMap(([, data]) => d3.pairs(data, (a, b) => [b, a])));
         let next = new Map(nameframes.flatMap(([, data]) => d3.pairs(data)));
+        console.log(nameframes);
 
         let x = d3.scaleLinear([0, 1], [margin.left, width - margin.right])
 
@@ -221,7 +222,12 @@ class BarChartRace extends React.Component{
 
     render() {
         return(
-            <div ref = "canvas">Bar!</div>
+          <div>
+            <h1>The Most Popular Baby Names in the US from 1880 - 2018</h1>
+            <h5><a href = "https://www.ssa.gov/oact/babynames/limits.html">Data Source </a></h5>
+            <div ref = "canvas"></div>
+
+          </div>
         )
     }
   }
