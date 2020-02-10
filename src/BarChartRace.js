@@ -1,6 +1,7 @@
 import React from 'react'
 import * as d3 from 'd3';
 import * as d3Array from "d3-array"
+import Footer from './Footer'
 
 
 class BarChartRace extends React.Component{
@@ -226,7 +227,7 @@ class BarChartRace extends React.Component{
             <h1>The Most Popular Baby Names in the US from 1880 - 2018</h1>
             <h5><a href = "https://www.ssa.gov/oact/babynames/limits.html">Data Source </a></h5>
             <div ref = "canvas"></div>
-
+            <Footer/>
           </div>
         )
     }
